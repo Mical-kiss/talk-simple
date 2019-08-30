@@ -1,10 +1,12 @@
 {
   "name": "talk-simple",
+  "bin": "bin/index.js",
   "version": "1.0.0",
   "description": "一个对话用的练手项目",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./bin/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/Mical-kiss/talk-simple/issues"
   },
-  "homepage": "https://github.com/Mical-kiss/talk-simple#readme"
+  "homepage": "https://github.com/Mical-kiss/talk-simple#readme",
+  "dependencies": {
+    "commander": "^3.0.0",
+    "inquirer": "^7.0.0",
+    "progress": "^2.0.3"
+  }
 }
