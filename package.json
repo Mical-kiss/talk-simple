@@ -1,0 +1,22 @@
+{
+  "name": "talk-simple",
+  "version": "1.0.0",
+  "description": "一个对话用的练手项目",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Mical-kiss/talk-simple.git"
+  },
+  "keywords": [
+    "command"
+  ],
+  "author": "zhengwj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mical-kiss/talk-simple/issues"
+  },
+  "homepage": "https://github.com/Mical-kiss/talk-simple#readme"
+}
