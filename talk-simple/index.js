@@ -23,7 +23,7 @@ function talkBegin () {
 }
 talkBegin() */
 
-(async function () {
+/* (async function () {
   var Git = require("nodegit")
   // var path = require("path")
   let tmp = await Git.Repository.open('.')
@@ -32,11 +32,12 @@ talkBegin() */
   // console.log(newBranch)
   let tmp1 = await tmp.createBranch('develop', '测试1', 1)
   console.log(tmp1)
-})()
+})() */
 
 const childProcess = require('child_process')
 const branch = childProcess.execSync('git rev-parse --abbrev-ref HEAD').toString().replace(/\s+/, '')
 
-
-
-console.log(branch)
+console.log(childProcess.execSync('git checkout develop'))
+console.log(childProcess.execSync('git pull'))
+console.log(childProcess.execSync('git checkout -b ' + branch + 'dev'))
+console.log(childProcess.execSync('git merge ' + branch))
