@@ -30,9 +30,8 @@ talkBegin() */
   console.log(tmp)
   // let newBranch = await Git.Branch.create(tmp, 'develop')
   // console.log(newBranch)
-  Git.Branch.create(tmp, 'develop', 'develop', 1).then(res => {
-    console.log(res)
-  })
+  let tmp1 = await tmp.createBranch('develop', '测试1', 1)
+  console.log(tmp1)
 })()
 
 const childProcess = require('child_process')
