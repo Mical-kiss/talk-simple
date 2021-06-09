@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const program = require('commander')
+/* const program = require('commander')
 var ProgressBar = require('progress')
 var bar = new ProgressBar('downloading [:bar] :rate/bps :percent :etas', { total: 1024, width: 20 })
 var timer = setInterval(function () {
@@ -28,7 +28,7 @@ program
   .option('--no-sauce', 'Remove sauce', function() {
     console.log('执行')
   })
-program.parse(process.argv)
+program.parse(process.argv) */
 // if (program.float !== undefined) console.log(`float: ${program.float}`);
 // if (program.small) console.log('- small pizza size');
 // if (program.pizzaType) console.log(`- ${program.pizzaType}`)
@@ -36,4 +36,4 @@ program.parse(process.argv)
 
 
 
-// require('../talk-simple/index')
+require('../talk-simple/index')

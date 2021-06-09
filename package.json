@@ -24,6 +24,7 @@
   "dependencies": {
     "commander": "^3.0.0",
     "inquirer": "^7.0.0",
+    "nodegit": "^0.27.0",
     "progress": "^2.0.3"
   }
 }
