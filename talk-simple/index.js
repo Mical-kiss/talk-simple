@@ -28,9 +28,11 @@ talkBegin() */
   // var path = require("path")
   let tmp = await Git.Repository.open('.')
   console.log(tmp)
-  let newBranch = await Git.Branch.create(tmp, 'develop')
-  console.log(newBranch)
-  
+  // let newBranch = await Git.Branch.create(tmp, 'develop')
+  // console.log(newBranch)
+  Git.Branch.create(tmp, 'develop', 'develop', 1).then(res => {
+    console.log(res)
+  })
 })()
 
 const childProcess = require('child_process')
