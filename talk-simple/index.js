@@ -1,5 +1,4 @@
 const childProcess = require('child_process')
-// const argv = require('yargs').alias('m', 'mr').alias('c', 'cr').boolean(['mr', 'cr']).argv
 const argv = require('yargs')
   .option('mr', {
     alias : 'm',
@@ -24,28 +23,12 @@ const argv = require('yargs')
   .epilog('copyright @ 2021 bd')
   .argv
 const inquirer = require('inquirer')
-const openDefaultBrowser = function (url) {
-  var exec = childProcess.exec
-  switch (process.platform) {
-    case "darwin":
-      exec('open ' + url)
-      break;
-    case "win32":
-      exec('start ' + url)
-      break;
-    default:
-      exec('xdg-open', [url])
-  }
-}
+const open = require('open')
+const ProgressBar = require('progress')
 const workBranch = childProcess.execSync('git rev-parse --abbrev-ref HEAD').toString().replace(/\s+/, '')
 const conflictTargetBranch = 'conflict-' + workBranch
 let currentRe = childProcess.execSync('git remote -v').toString()
 currentRe = currentRe.split('\n')[0].split(currentRe.includes('@') ? '@' : '//')[1].replace('.git (fetch)', '').replace(':', '/')
-// return
-// origin  git@github.com:Mical-kiss/talk-simple.git (fetch)
-// origin  http://git.dev.biaodianyun.com/biaodianyun/ds_shopadmin_pc.git (fetch)
-// origin  git@git.dev.biaodianyun.com:biaodianyun/ds_shopadmin_pc.git (fetch)
-// http://git.dev.biaodianyun.com/biaodianyun/ds_shopadmin_pc/-/merge_requests/new?merge_request[source_branch]=backup/9cell&merge_request[target_branch]=master
 
 if (argv.mr) {
   creatMR()
@@ -57,8 +40,8 @@ if (argv.mr) {
     name: 'actionName',
     message: '选择要进行的git操作',
     choices: [
-      "解决冲突",
-      "创建MR"
+      '解决冲突',
+      '创建MR'
     ]
   }]).then(answers => {
     switch (answers.actionName) {
@@ -74,36 +57,39 @@ if (argv.mr) {
   })
 }
 function fixConflict () {
+  var bar = new ProgressBar('progress: [:bar]', { total: 10 })
   childProcess.execSync('git branch -D develop')
+  bar.tick(2)
   childProcess.execSync('git checkout develop')
+  bar.tick(2)
   childProcess.execSync('git checkout -b ' + conflictTargetBranch)
+  bar.tick(3)
   childProcess.execSync('git push --set-upstream origin ' + conflictTargetBranch)
   try {
     childProcess.execSync('git merge ' + workBranch)
-    creatMR()
+    bar.tick(3)
+    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${conflictTargetBranch}&merge_request[target_branch]=develop`)
   } catch (error) {
-    creatMR()
+    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${conflictTargetBranch}&merge_request[target_branch]=develop`)
+    bar.tick(3)
   }
 }
 
 function creatMR () {
   if (argv.ta) {
-    // console.log(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${argv.ta}`)
-    openDefaultBrowser(encodeURI(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${argv.ta}`))
+    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${argv.ta}`)
   } else {
     inquirer.prompt([{
       type: 'list',
       name: 'actionName',
       message: '选择要到合并的分支',
       choices: [
-        "release",
-        "release_payment",
-        "master"
+        'release',
+        'release_payment',
+        'master'
       ]
     }]).then(answers => {
-      console.log(answers)
-      console.log(`http://${currentRe}/-/merge_requests/new?` + (`merge_request[target_branch]=${answers.actionName}&merge_request[source_branch]=${workBranch}`))
-      openDefaultBrowser(`http://${currentRe}/-/merge_requests/new?` + (`merge_request[target_branch]=${answers.actionName}&merge_request[source_branch]=${workBranch}`))
+      open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${answers.actionName}`)
     })
   }
 }
