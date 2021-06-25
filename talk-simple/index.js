@@ -13,7 +13,7 @@ const argv = require('yargs')
   })
   .option('ta', {
     alias : 't',
-    describe: '制定mr时默认的分支',
+    describe: '指定mr时默认的分支',
     type: 'string'
   })
   .example('bd --mr', '创建合并请求')
@@ -78,8 +78,12 @@ function fixConflict () {
   childProcess.execSync('git checkout develop')
   childProcess.execSync('git checkout -b ' + conflictTargetBranch)
   childProcess.execSync('git push --set-upstream origin ' + conflictTargetBranch)
-  childProcess.execSync('git merge ' + workBranch)
-  creatMR()
+  try {
+    childProcess.execSync('git merge ' + workBranch)
+    creatMR()
+  } catch (error) {
+    creatMR()
+  }
 }
 
 function creatMR () {
@@ -93,11 +97,13 @@ function creatMR () {
       message: '选择要到合并的分支',
       choices: [
         "release",
-        "release_payment"
+        "release_payment",
+        "master"
       ]
     }]).then(answers => {
       console.log(answers)
-      openDefaultBrowser(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${answers.actionName}`)
+      console.log(`http://${currentRe}/-/merge_requests/new?` + (`merge_request[target_branch]=${answers.actionName}&merge_request[source_branch]=${workBranch}`))
+      openDefaultBrowser(`http://${currentRe}/-/merge_requests/new?` + (`merge_request[target_branch]=${answers.actionName}&merge_request[source_branch]=${workBranch}`))
     })
   }
 }

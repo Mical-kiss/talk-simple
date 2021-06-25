@@ -1,5 +1,5 @@
 {
-  "name": "bd-git-tool",
+  "name": "bd-tools",
   "bin": "bin/index.js",
   "version": "1.0.1",
   "description": "一个对话用的练手项目",
