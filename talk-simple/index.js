@@ -68,16 +68,16 @@ function fixConflict () {
   try {
     childProcess.execSync('git merge ' + workBranch)
     bar.tick(3)
-    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${conflictTargetBranch}&merge_request[target_branch]=develop`)
+    open(getMrUrl(conflictTargetBranch, 'develop'))
   } catch (error) {
-    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${conflictTargetBranch}&merge_request[target_branch]=develop`)
     bar.tick(3)
+    open(getMrUrl(conflictTargetBranch, 'develop'))
   }
 }
 
 function creatMR () {
   if (argv.ta) {
-    open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${argv.ta}`)
+    open(getMrUrl(workBranch, argv.ta))
   } else {
     inquirer.prompt([{
       type: 'list',
@@ -89,7 +89,11 @@ function creatMR () {
         'master'
       ]
     }]).then(answers => {
-      open(`http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${workBranch}&merge_request[target_branch]=${answers.actionName}`)
+      open(getMrUrl(workBranch, answers.actionName))
     })
   }
+}
+
+function getMrUrl(sB, tB) {
+  return `http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${sB}&merge_request[target_branch]=${tB}`
 }
