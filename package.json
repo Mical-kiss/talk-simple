@@ -1,7 +1,7 @@
 {
   "name": "bd-tools",
   "bin": "bin/index.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "一个对话用的练手项目",
   "main": "index.js",
   "scripts": {

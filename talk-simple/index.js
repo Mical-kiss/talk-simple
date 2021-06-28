@@ -15,9 +15,9 @@ const argv = require('yargs')
     describe: '指定mr时默认的分支',
     type: 'string'
   })
-  .example('bd --mr', '创建合并请求')
-  .example('bd --cr', '解决冲突')
-  .example('bd --ta release', '指定release为要merge request到的分支')
+  .example('bd-tools --mr', '创建合并请求')
+  .example('bd-tools --cr', '解决冲突')
+  .example('bd-tools --ta release', '指定release为要merge request到的分支')
   .help('h')
   .alias('h', 'help')
   .epilog('copyright @ 2021 bd')
