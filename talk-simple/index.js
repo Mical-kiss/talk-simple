@@ -26,7 +26,6 @@ const inquirer = require('inquirer')
 const open = require('open')
 const ProgressBar = require('progress')
 const workBranch = childProcess.execSync('git rev-parse --abbrev-ref HEAD').toString().replace(/\s+/, '')
-const conflictTargetBranch = 'conflict-' + workBranch
 let currentRe = childProcess.execSync('git remote -v').toString()
 currentRe = currentRe.split('\n')[0].split(currentRe.includes('@') ? '@' : '//')[1].replace('.git (fetch)', '').replace(':', '/')
 
@@ -56,11 +55,31 @@ if (argv.mr) {
     }
   })
 }
-function fixConflict () {
+async function fixConflict () {
+  let conflictBranch = ''
+  let conflictTargetBranch = ''
+  if (argv.ta) {
+    conflictBranch = argv.ta
+  } else {
+    conflictBranch = (await inquirer.prompt([{
+      type: 'list',
+      name: 'actionName',
+      message: '选择要到合并的分支',
+      choices: [
+        'develop',
+        'release',
+        'release_payment',
+        'master'
+      ]
+    }])).actionName
+  }
+  conflictTargetBranch = 'conflict-' + workBranch
   var bar = new ProgressBar('progress: [:bar]', { total: 10 })
-  childProcess.execSync('git branch -D develop')
-  bar.tick(2)
-  childProcess.execSync('git checkout develop')
+  try {
+    bar.tick(2)
+    childProcess.execSync('git branch -D ' + conflictBranch)
+  } catch (e) {}
+  childProcess.execSync('git checkout ' + conflictBranch)
   bar.tick(2)
   childProcess.execSync('git checkout -b ' + conflictTargetBranch)
   bar.tick(3)
@@ -68,10 +87,11 @@ function fixConflict () {
   try {
     childProcess.execSync('git merge ' + workBranch)
     bar.tick(3)
-    open(getMrUrl(conflictTargetBranch, 'develop'))
+    open(getMrUrl(conflictTargetBranch, conflictBranch))
   } catch (error) {
     bar.tick(3)
-    open(getMrUrl(conflictTargetBranch, 'develop'))
+    console.log('1、在编辑器中解决冲突后，推送到remote;\n2、在刚才打开的页面创建合并请求;')
+    open(getMrUrl(conflictTargetBranch, conflictBranch))
   }
 }
 
