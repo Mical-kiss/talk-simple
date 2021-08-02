@@ -81,6 +81,7 @@ async function fixConflict () {
   } catch (e) {}
   childProcess.execSync('git checkout ' + conflictBranch)
   bar.tick(2)
+  childProcess.execSync('git branch -D ' + conflictTargetBranch)
   childProcess.execSync('git checkout -b ' + conflictTargetBranch)
   bar.tick(3)
   childProcess.execSync('git push --set-upstream origin ' + conflictTargetBranch)
