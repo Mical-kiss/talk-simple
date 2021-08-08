@@ -118,5 +118,5 @@ function creatMR () {
 }
 
 function getMrUrl(sB, tB) {
-  return `http://${currentRe}/-/merge_requests/new?merge_request[source_branch]=${sB}&merge_request[target_branch]=${tB}`
+  return `http://${currentRe}/-/merge_requests/new?` + encodeURI(`merge_request[source_branch]=${sB}&merge_request[target_branch]=${tB}`)
 }
